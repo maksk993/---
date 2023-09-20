@@ -9,6 +9,7 @@ using namespace std;
 
 const char X = 'X';
 const char O = 'O';
+int choiceOpp;
 
 int start() {
     cout << "Игра \"Крестики-нолики\".\n\n";
@@ -287,7 +288,7 @@ int main()
     int charge = 0;
     char winner = '0';
 
-    int choiceOpp = start();
+    choiceOpp = start();
     if (choiceOpp == 1) {
         startPvP();
         PvP(charge, winner, field);
