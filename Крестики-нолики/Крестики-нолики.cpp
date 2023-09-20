@@ -88,7 +88,7 @@ void Ocharge(vector<char>& field) {
     display(field);
 }
 
-char checkWinner(vector<char>& field, int charge) {
+char checkWinner(vector<char>& field, char symbol) {
     vector<char>::iterator iter;
     iter = find(field.begin(), field.end(), ' ');
     if (
@@ -102,7 +102,7 @@ char checkWinner(vector<char>& field, int charge) {
         (field[2] == field[4] && field[4] == field[6] && field[2] != ' ')
         ) 
     {
-        if (charge == 0)
+        if (symbol == X)
             return X;
         else 
             return O;
@@ -130,7 +130,7 @@ void PvP(int charge, char winner, vector<char>& field) {
     {
         if (charge == 0) {
             Xcharge(field);
-            winner = checkWinner(field, charge);
+            winner = checkWinner(field, X);
             if (winner != '0') {
                 announceWinner(winner);
                 break;
@@ -139,7 +139,7 @@ void PvP(int charge, char winner, vector<char>& field) {
         }
         if (charge == 1) {
             Ocharge(field);
-            winner = checkWinner(field, charge);
+            winner = checkWinner(field, O);
             if (winner != '0') {
                 announceWinner(winner);
                 break;
@@ -257,7 +257,7 @@ void PvE(int charge, char winner, vector<char>& field) {
     {
         if (charge == 0) {
             playerCharge(field, playerSymbol);
-            winner = checkWinner(field, charge);
+            winner = checkWinner(field, playerSymbol);
             if (winner != '0') {
                 announceWinner(winner);
                 break;
@@ -266,10 +266,7 @@ void PvE(int charge, char winner, vector<char>& field) {
         }
         if (charge == 1) {
             computerCharge(field, computerSymbol, playerSymbol);
-            if (computerSymbol == X) {
-                winner = checkWinner(field, 0);
-            } else
-                winner = checkWinner(field, charge);
+            winner = checkWinner(field, computerSymbol);
             if (winner != '0') {
                 announceWinner(winner);
                 break;
