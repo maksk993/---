@@ -124,9 +124,8 @@ void announceWinner(char winner) {
 
 void PvP(int charge, char winner, vector<char>& field) {
     vector<char>::iterator iter;
-    iter = find(field.begin(), field.end(), ' ');
 
-    while (iter != field.end())
+    while (true)
     {
         if (charge == 0) {
             Xcharge(field);
@@ -227,9 +226,6 @@ void playerCharge(vector<char>& field, char playerSymbol) {
 }
 
 void PvE(int charge, char winner, vector<char>& field) {
-    vector<char>::iterator iter;
-    iter = find(field.begin(), field.end(), ' ');
-
     char playerSymbol;
     cout << "\nВыберите символ (X или O): \n";
     cin >> playerSymbol;
@@ -253,7 +249,7 @@ void PvE(int charge, char winner, vector<char>& field) {
     else
         charge = 1;
 
-    while (iter != field.end())
+    while (true)
     {
         if (charge == 0) {
             playerCharge(field, playerSymbol);
