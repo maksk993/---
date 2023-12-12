@@ -7,20 +7,6 @@ const char O = 'O';
 
 enum class Winner { No_winner, X, O, Draw };
 
-int start() {
-    std::cout << "Игра \"Крестики-нолики\".\n\n";
-    std::cout << "Выберите режим игры: \n\n";
-    std::cout << "1. Игрок против игрока\n";
-    std::cout << "2. Игрок против компьютера\n\n";
-    int choiceOpp;
-    std::cin >> choiceOpp;
-    while (choiceOpp != 1 && choiceOpp != 2) {
-        std::cout << "\nВведите цифру 1 или 2!\n\n";
-        std::cin >> choiceOpp;
-    }
-    return choiceOpp;
-}
-
 void startPvP() {
     std::cout << "\nИгроки ходят по очереди. Первыми начинают крестики\n";
     std::cout << "Для того, чтобы сделать ход, нужно указать клетку с помощью цифры от 1 до 9: \n\n";
@@ -55,6 +41,7 @@ bool checkFree(std::vector<char>& field, int choice) { return field[choice - 1] 
 int checkEnter(std::vector<char>& field) {
     int choice;
     std::cin >> choice;
+
     while ((choice < 1 || choice > 9) || checkFree(field, choice) != true) {
         if (choice < 1 || choice > 9) {
             std::cout << "\nВводите числа только от 1 до 9!\n\n";
@@ -64,6 +51,7 @@ int checkEnter(std::vector<char>& field) {
         }
         std::cin >> choice;
     }
+
     return choice;
 }
 
@@ -89,8 +77,7 @@ Winner checkWinner(std::vector<char>& field, char symbol) {
         (field[2] == field[5] && field[5] == field[8] && field[2] != ' ') ||
         (field[0] == field[4] && field[4] == field[8] && field[0] != ' ') ||
         (field[2] == field[4] && field[4] == field[6] && field[2] != ' ')
-        ) 
-    {
+        ) {
         if (symbol == X)
             return Winner::X;
         else 
@@ -99,21 +86,21 @@ Winner checkWinner(std::vector<char>& field, char symbol) {
     else if (find(field.begin(), field.end(), ' ') == field.end()) {
         return Winner::Draw;
     }
+
     return Winner::No_winner;
 }
 
 void announceWinner(Winner winner) {
     if (winner == Winner::X)
         std::cout << "\nПобедил игрок, играющий за X" << std::endl << std::endl;
-    else if (winner == Winner::O)
-        std::cout << "\nПобедил игрок, играющий за O" << std::endl << std::endl;
-    else
-        std::cout << "\nНичья!" << std::endl << std::endl;
+    else if (winner == Winner::O) std::cout << "\nПобедил игрок, играющий за O" << std::endl << std::endl;
+    else std::cout << "\nНичья!" << std::endl << std::endl;
+
+    std::cout << "Спасибо за игру!\n";
 }
 
 void PvP(int charge, Winner winner, std::vector<char>& field) {
-    while (true)
-    {
+    while (true) {
         if (charge == 0) {
             Xcharge(field);
             winner = checkWinner(field, X);
@@ -142,19 +129,15 @@ int computerExtraCharge(std::vector<char> field, char computerSymbol, char playe
             if (checkWinner(field, computerSymbol) != Winner::No_winner) {
                 return ++i;
             }
-            else
-                field[i] = ' ';
+            else field[i] = ' ';
         }
     }
     // если компьютер не может победить следующим ходом, то проверяется, может ли он проиграть следующим ходом
     for (int i = 0; i < field.size(); i++) {
         if (checkFree(field, i + 1) == true) {
             field[i] = playerSymbol;
-            if (checkWinner(field, playerSymbol) != Winner::No_winner) {
-                return ++i;
-            }
-            else
-                field[i] = ' ';
+            if (checkWinner(field, playerSymbol) != Winner::No_winner) return ++i;
+            else field[i] = ' ';
         }
     }
     return 0;
@@ -162,13 +145,12 @@ int computerExtraCharge(std::vector<char> field, char computerSymbol, char playe
 
 void computerCharge(std::vector<char>& field, char computerSymbol, char playerSymbol) {
     int choice = computerExtraCharge(field, computerSymbol, playerSymbol); // первым делом проверяется, может ли победить компьютер следующим ходом или проиграть
-    if (choice != 0) {
-        field[choice - 1] = computerSymbol;
-    }
+    
+    if (choice != 0) field[choice - 1] = computerSymbol;
     else { // если ни одно из условий не выполняется, то компьютер ходит на свободную клетку в определенном порядке
         std::vector<int> order{ 5,1,3,7,9,2,4,6,8 };
-        for (auto& i : order)
-        {
+
+        for (auto& i : order) {
             if (checkFree(field, i) == true) {
                 choice = i;
                 field[choice - 1] = computerSymbol;
@@ -176,6 +158,7 @@ void computerCharge(std::vector<char>& field, char computerSymbol, char playerSy
             }
         }
     }
+
     std::cout << "\nКомпьютер ходит на клетку " << choice << "\n\n";
     display(field);
 }
@@ -190,25 +173,20 @@ void PvE(int charge, Winner winner, std::vector<char>& field) {
     char playerSymbol;
     std::cout << "\nВыберите символ (X или O): \n";
     std::cin >> playerSymbol;
-    while (playerSymbol != X && playerSymbol != O)
-    {
+
+    while (playerSymbol != X && playerSymbol != O) {
         std::cout << "\nВводите только X или O\n";
         std::cin >> playerSymbol;
     }
 
     char computerSymbol;
-    if (playerSymbol == X) {
-        computerSymbol = O;
-    }
+    if (playerSymbol == X) computerSymbol = O;
     else computerSymbol = X;
 
-    if (playerSymbol == X) {
-        std::cout << "\nДля начала игры выберите клетку. Удачи!\n\n";
-    }
+    if (playerSymbol == X) std::cout << "\nДля начала игры выберите клетку. Удачи!\n\n";
     else charge = 1;
 
-    while (true)
-    {
+    while (true) {
         if (charge == 0) {
             playerCharge(field, playerSymbol);
             winner = checkWinner(field, playerSymbol);
@@ -230,15 +208,24 @@ void PvE(int charge, Winner winner, std::vector<char>& field) {
     }
 }
 
-int main()
-{
-    setlocale(LC_ALL, "Russian");
+void start() {
     std::vector<char> field(9, ' ');
-    
     int charge = 0;
     Winner winner = Winner::No_winner;
 
-    int choiceOpp = start();
+    std::cout << "Игра \"Крестики-нолики\".\n\n";
+    std::cout << "Выберите режим игры: \n\n";
+    std::cout << "1. Игрок против игрока\n";
+    std::cout << "2. Игрок против компьютера\n\n";
+
+    int choiceOpp;
+    std::cin >> choiceOpp;
+
+    while (choiceOpp != 1 && choiceOpp != 2) {
+        std::cout << "\nВведите цифру 1 или 2!\n\n";
+        std::cin >> choiceOpp;
+    }
+
     if (choiceOpp == 1) {
         startPvP();
         PvP(charge, winner, field);
@@ -247,8 +234,12 @@ int main()
         startPvE();
         PvE(charge, winner, field);
     }
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian");
+
+    start();
   
-    std::cout << "Спасибо за игру!\n";
-    
     return 0;
 }
