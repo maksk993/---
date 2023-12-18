@@ -192,7 +192,9 @@ int TicTacToe::computerTurnExtra(char computerSymbol, char playerSymbol) {
     for (int i = 0; i < field.size(); i++) {
         if (checkFree(i + 1) == true) {
             field[i] = playerSymbol;
-            if (checkWinner(playerSymbol) != Winner::No_winner) return ++i;
+            if (checkWinner(playerSymbol) != Winner::No_winner) {
+                return ++i;
+            }
             else field[i] = ' ';
         }
     }
@@ -257,9 +259,8 @@ void TicTacToe::announceWinner() {
 }
 
 void TicTacToe::display() {
-    std::vector<char> copy_of_field = field;
-    for (int i = 0; i < copy_of_field.size(); i++) {
-        std::cout << " " << copy_of_field[i];
+    for (int i = 0; i < field.size(); i++) {
+        std::cout << " " << field[i];
         if ((1 + i) % 3 != 0) {
             std::cout << " |";
         }
