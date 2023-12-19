@@ -8,15 +8,15 @@ class TicTacToe {
 
     std::vector<char> field;
 
-    enum class Turn { X, O, Player, Computer }; // для режима PvP: Turn::X и Turn::O - ход игрока Х и ход игрока О соответственно,
+    enum class Turn { X, O, PLAYER, COMPUTER }; // для режима PvP: Turn::X и Turn::O - ход игрока Х и ход игрока О соответственно,
                                                 // для режима PvЕ: Turn::Player и Turn::Computer - ход игрока и ход компьютера соответсвенно
-    enum class Winner { No_winner, X, O, Draw };
+    enum class Winner { NO_WINNER, X, O, DRAW };
 
     Turn turn;
     Winner winner;
 
 public:
-    TicTacToe() : X('X'), O('O'), turn(Turn::X), winner(Winner::No_winner) { field.insert(field.end(), 9, ' '); }
+    TicTacToe() : X('X'), O('O'), turn(Turn::X), winner(Winner::NO_WINNER) { field.insert(field.end(), 9, ' '); }
     void start();
 
 private:
@@ -85,7 +85,7 @@ void TicTacToe::PvP() {
         if (turn == Turn::X) {
             Xturn();
             winner = checkWinner(X);
-            if (winner != Winner::No_winner) {
+            if (winner != Winner::NO_WINNER) {
                 announceWinner();
                 break;
             }
@@ -94,7 +94,7 @@ void TicTacToe::PvP() {
         if (turn == Turn::O) {
             Oturn();
             winner = checkWinner(O);
-            if (winner != Winner::No_winner) {
+            if (winner != Winner::NO_WINNER) {
                 announceWinner();
                 break;
             }
@@ -128,32 +128,32 @@ void TicTacToe::PvE() {
     char computerSymbol;
     if (playerSymbol == X) {
         computerSymbol = O;
-        turn = Turn::Player;
+        turn = Turn::PLAYER;
         std::cout << "\nДля начала игры выберите клетку. Удачи!\n\n";
     }
     else {
         computerSymbol = X;
-        turn = Turn::Computer;
+        turn = Turn::COMPUTER;
     }
 
     while (true) {
-        if (turn == Turn::Player) {
+        if (turn == Turn::PLAYER) {
             playerTurn(playerSymbol);
             winner = checkWinner(playerSymbol);
-            if (winner != Winner::No_winner) {
+            if (winner != Winner::NO_WINNER) {
                 announceWinner();
                 break;
             }
-            turn = Turn::Computer;
+            turn = Turn::COMPUTER;
         }
-        if (turn == Turn::Computer) {
+        if (turn == Turn::COMPUTER) {
             computerTurn(computerSymbol, playerSymbol);
             winner = checkWinner(computerSymbol);
-            if (winner != Winner::No_winner) {
+            if (winner != Winner::NO_WINNER) {
                 announceWinner();
                 break;
             }
-            turn = Turn::Player;
+            turn = Turn::PLAYER;
         }
     }
 }
@@ -182,7 +182,7 @@ int TicTacToe::computerTurnExtra(char computerSymbol, char playerSymbol) {
     for (int i = 0; i < field.size(); i++) { // если компьютер может победить следующим ходом, он ставит символ так, чтобы победить
         if (checkFree(i + 1) == true) {
             field[i] = computerSymbol;
-            if (checkWinner(computerSymbol) != Winner::No_winner) {
+            if (checkWinner(computerSymbol) != Winner::NO_WINNER) {
                 return ++i;
             }
             else field[i] = ' ';
@@ -192,7 +192,7 @@ int TicTacToe::computerTurnExtra(char computerSymbol, char playerSymbol) {
     for (int i = 0; i < field.size(); i++) {
         if (checkFree(i + 1) == true) {
             field[i] = playerSymbol;
-            if (checkWinner(playerSymbol) != Winner::No_winner) {
+            if (checkWinner(playerSymbol) != Winner::NO_WINNER) {
                 return ++i;
             }
             else field[i] = ' ';
@@ -243,10 +243,10 @@ TicTacToe::Winner TicTacToe::checkWinner(char symbol) {
             return Winner::O;
     }
     else if (find(field.begin(), field.end(), ' ') == field.end()) {
-        return Winner::Draw;
+        return Winner::DRAW;
     }
 
-    return Winner::No_winner;
+    return Winner::NO_WINNER;
 }
 
 void TicTacToe::announceWinner() {
